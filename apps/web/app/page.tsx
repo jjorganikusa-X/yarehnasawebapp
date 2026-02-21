@@ -8,8 +8,15 @@ export default function HomePage() {
   const [currentLang, setCurrentLang] = useState('ID');
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const languageSwitcherRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (languageSwitcherRef.current && !languageSwitcherRef.current.contains(event.target as Node)) {
         setLanguageMenuOpen(false);
@@ -20,7 +27,7 @@ export default function HomePage() {
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [mounted]);
 
   const toggleLanguageMenu = () => {
     setLanguageMenuOpen(!languageMenuOpen);
@@ -41,7 +48,7 @@ export default function HomePage() {
 
     return (
       <>
-        <div className="bg-gray-50 text-gray-800 font-sans antialiased">
+        <div className="bg-gray-50 text-gray-800 font-sans antialiased" suppressHydrationWarning>
           {/* 
       AESTHETIC DNA:
       Trend Core: Corporate Agri-Tech
@@ -52,7 +59,7 @@ export default function HomePage() {
     */}
 
     {/* Sticky Header */}
-    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav border-b border-gray-100 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav border-b border-gray-100 shadow-sm bg-white/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             {/* Logo */}
             <a href="#" className="flex items-center gap-3 group">
@@ -65,19 +72,19 @@ export default function HomePage() {
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1 bg-gray-100/50 p-1.5 rounded-full border border-gray-200">
-                <button className="px-5 py-2 rounded-full bg-white text-yareh-blue font-medium shadow-sm transition-all text-sm">
+                <button className="px-5 py-2.5 rounded-full bg-white text-yareh-blue font-semibold shadow-sm transition-all text-sm">
                     Beranda
                 </button>
-                <button onClick={() => router.push('/about-us')} className="px-5 py-2 rounded-full text-gray-600 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
+                <button onClick={() => router.push('/about-us')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
                     Tentang Kami
                 </button>
-                <button onClick={() => router.push('/market-and-products')} className="px-5 py-2 rounded-full text-gray-600 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
+                <button onClick={() => router.push('/market-and-products')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
                     Potensi & Produk
                 </button>
-                <button onClick={() => router.push('/sustainability')} className="px-5 py-2 rounded-full text-gray-600 hover:text-yareh-green hover:bg-white/50 font-medium transition-all text-sm">
+                <button onClick={() => router.push('/sustainability')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-green hover:bg-white/50 font-medium transition-all text-sm">
                     Keberlanjutan
                 </button>
-                <button onClick={() => router.push('/investor-relations')} className="px-5 py-2 rounded-full text-gray-600 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
+                <button onClick={() => router.push('/investor-relations')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
                     Investor
                 </button>
             </nav>
@@ -85,6 +92,7 @@ export default function HomePage() {
             {/* Language Switcher & CTA */}
             <div className="flex items-center gap-4">
                 {/* Language Switcher */}
+                {mounted && (
                 <div ref={languageSwitcherRef} className="relative language-switcher">
                     <button onClick={toggleLanguageMenu} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
                         <i className="ph-fill ph-globe text-xl text-gray-600"></i>
@@ -114,8 +122,9 @@ export default function HomePage() {
                         </button>
                     </div>
                 </div>
+                )}
                 
-                <button onClick={() => router.push('/investor-relations')} className="hidden md:flex items-center gap-2 bg-yareh-blue text-white px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-lg shadow-blue-900/20">
+                <button onClick={() => router.push('/investor-relations')} className="hidden md:flex items-center gap-2 bg-yareh-blue text-white px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-lg shadow-blue-900/20 font-semibold">
                     <span>Investasi</span>
                     <i className="ph ph-arrow-right"></i>
                 </button>
@@ -151,7 +160,7 @@ export default function HomePage() {
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500">Negara Kepulauan Rempah</span>
                 </h1>
                 
-                <p className="text-xl text-gray-200 max-w-xl font-light">
+                <p className="text-xl text-gray-200 max-w-xl font-light leading-relaxed">
                     Membangun integritas dalam bisnis pangan dunia. Visi kami menjadi penyuplai jahe terbesar dengan teknologi pertanian regeneratif dan transparansi total.
                 </p>
 
@@ -166,7 +175,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="pt-8 border-t border-white/10">
-                    <p className="text-white/60 text-sm italic mb-2">"Nama baik lebih berharga dari pada kekayaan besar"</p>
+                    <p className="text-white/60 text-sm italic mb-2">&quot;Nama baik lebih berharga dari pada kekayaan besar&quot;</p>
                     <div className="flex items-center gap-2 text-yareh-green font-serif font-bold">
                         <i className="ph-fill ph-book-bookmark"></i>
                         <span>Amsal 22:1</span>
@@ -254,7 +263,7 @@ export default function HomePage() {
                             </div>
                         </div>
                         <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <p className="text-white font-serif italic text-lg">"Pusat rempah dunia yang historis"</p>
+                            <p className="text-white font-serif italic text-lg">&quot;Pusat rempah dunia yang historis&quot;</p>
                             <p className="text-white/70 text-sm">Hatusua, Kabupaten SBB - Maluku</p>
                         </div>
                     </div>
