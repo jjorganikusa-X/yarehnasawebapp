@@ -53,7 +53,7 @@ export default function InvestorRelationsPage() {
         const onclick = target.getAttribute && target.getAttribute('onclick');
         if (onclick && onclick.includes('navigateTo')) {
           // Extract screen ID from onclick="navigateTo('screenId')" or onclick="navigateTo(\"screenId\")"
-          const match = onclick.match(/navigateTo\s*\(\s*['\"](\w+)['\"]/);
+          const match = onclick.match(/navigateTo\s*\(\s*['\"](\w+)['\"]/);;
           if (match && match[1]) {
             e.preventDefault();
             e.stopPropagation();
@@ -336,26 +336,26 @@ export default function InvestorRelationsPage() {
                 {/* Right Side: Form */}
                 <div className="lg:w-2/3 p-10 lg:p-12">
                     <h3 className="text-2xl font-bold text-gray-900 mb-6">Request Access</h3>
-                    <form className="space-y-6" __gchrome_uniqueid="1">
+                    <form className="space-y-6">
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">Nama Lengkap</label>
-                                <input type="text" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="John Doe" __gchrome_uniqueid="2" />
+                                <input type="text" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="John Doe" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">Nama Organisasi / Perusahaan</label>
-                                <input type="text" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="Ventures Capital Ltd" __gchrome_uniqueid="3" />
+                                <input type="text" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="Ventures Capital Ltd" />
                             </div>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">Email Bisnis</label>
-                                <input type="email" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="john@company.com" __gchrome_uniqueid="4" />
+                                <input type="email" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="john@company.com" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">Jenis Minat</label>
-                                <select className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input bg-white" __gchrome_uniqueid="5">
+                                <select className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input bg-white">
                                     <option>Pilih Opsi</option>
                                     <option>Angel Investor</option>
                                     <option>Venture Capital</option>
@@ -367,7 +367,7 @@ export default function InvestorRelationsPage() {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">Pesan Tambahan</label>
-                            <textarea rows="3" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="Ceritakan sedikit tentang ketertarikan Anda..." __gchrome_uniqueid="6"></textarea>
+                            <textarea rows={3} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-yareh-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all form-input" placeholder="Ceritakan sedikit tentang ketertarikan Anda..."></textarea>
                         </div>
 
                         <div className="pt-4 flex items-center justify-between">
