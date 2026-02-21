@@ -1,16 +1,22 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '../lib/useLanguage';
+import { Language } from '../lib/translations';
 
 export default function LanguageSwitcher() {
-  const [currentLang, setCurrentLang] = useState('ID');
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const languageSwitcherRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
-    // Only run on client side
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (languageSwitcherRef.current && !languageSwitcherRef.current.contains(event.target as Node)) {
         setLanguageMenuOpen(false);
@@ -21,24 +27,26 @@ export default function LanguageSwitcher() {
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [mounted]);
 
   const toggleLanguageMenu = () => {
     setLanguageMenuOpen(!languageMenuOpen);
   };
 
-  const changeLanguage = (lang: string) => {
-    const langNames: { [key: string]: string } = {
-      'id': 'ID',
-      'en': 'EN',
-      'jp': 'JP',
-      'nl': 'NL',
-      'de': 'DE'
-    };
-    setCurrentLang(langNames[lang]);
+  const changeLanguage = (lang: Language) => {
+    setLanguage(lang);
     setLanguageMenuOpen(false);
-    console.log('Language changed to:', lang);
   };
+
+  const langNames: { [key in Language]: string } = {
+    'id': 'ID',
+    'en': 'EN',
+    'jp': 'JP',
+    'nl': 'NL',
+    'de': 'DE'
+  };
+
+  const currentLangDisplay = langNames[language];
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
@@ -55,7 +63,7 @@ export default function LanguageSwitcher() {
     <div ref={languageSwitcherRef} className="relative language-switcher">
       <button onClick={toggleLanguageMenu} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
         <i className="ph-fill ph-globe text-xl text-gray-600"></i>
-        <span className="text-sm font-medium text-gray-700">{currentLang}</span>
+        <span className="text-sm font-medium text-gray-700">{currentLangDisplay}</span>
         <i className="ph ph-caret-down text-sm text-gray-600"></i>
       </button>
       <div className={`${languageMenuOpen ? '' : 'hidden'} absolute right-0 top-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[200px] z-50`}>

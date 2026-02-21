@@ -1,50 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import LanguageSwitcher from './components/LanguageSwitcher';
+import { useLanguage } from './lib/useLanguage';
 
 export default function HomePage() {
   const router = useRouter();
-  const [currentLang, setCurrentLang] = useState('ID');
-  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
-  const languageSwitcherRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (languageSwitcherRef.current && !languageSwitcherRef.current.contains(event.target as Node)) {
-        setLanguageMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [mounted]);
-
-  const toggleLanguageMenu = () => {
-    setLanguageMenuOpen(!languageMenuOpen);
-  };
-
-  const changeLanguage = (lang: string) => {
-    const langNames: { [key: string]: string } = {
-      'id': 'ID',
-      'en': 'EN',
-      'jp': 'JP',
-      'nl': 'NL',
-      'de': 'DE'
-    };
-    setCurrentLang(langNames[lang]);
-    setLanguageMenuOpen(false);
-    console.log('Language changed to:', lang);
-  };
 
     return (
       <>
@@ -73,59 +41,28 @@ export default function HomePage() {
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1 bg-gray-100/50 p-1.5 rounded-full border border-gray-200">
                 <button className="px-5 py-2.5 rounded-full bg-white text-yareh-blue font-semibold shadow-sm transition-all text-sm">
-                    Beranda
+                    {t('nav.home')}
                 </button>
                 <button onClick={() => router.push('/about-us')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
-                    Tentang Kami
+                    {t('nav.about')}
                 </button>
                 <button onClick={() => router.push('/market-and-products')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
-                    Potensi & Produk
+                    {t('nav.products')}
                 </button>
                 <button onClick={() => router.push('/sustainability')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-green hover:bg-white/50 font-medium transition-all text-sm">
-                    Keberlanjutan
+                    {t('nav.sustainability')}
                 </button>
                 <button onClick={() => router.push('/investor-relations')} className="px-5 py-2.5 rounded-full text-gray-700 hover:text-yareh-blue hover:bg-white/50 font-medium transition-all text-sm">
-                    Investor
+                    {t('nav.investor')}
                 </button>
             </nav>
 
             {/* Language Switcher & CTA */}
             <div className="flex items-center gap-4">
-                {/* Language Switcher */}
-                {mounted && (
-                <div ref={languageSwitcherRef} className="relative language-switcher">
-                    <button onClick={toggleLanguageMenu} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-                        <i className="ph-fill ph-globe text-xl text-gray-600"></i>
-                        <span className="text-sm font-medium text-gray-700">{currentLang}</span>
-                        <i className="ph ph-caret-down text-sm text-gray-600"></i>
-                    </button>
-                    <div className={`${languageMenuOpen ? '' : 'hidden'} absolute right-0 top-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[200px] z-50`}>
-                        <button onClick={() => changeLanguage('id')} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
-                            <span className="text-2xl">🇮🇩</span>
-                            <span className="text-sm font-medium text-gray-700">Bahasa Indonesia</span>
-                        </button>
-                        <button onClick={() => changeLanguage('en')} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
-                            <span className="text-2xl">🇺🇸</span>
-                            <span className="text-sm font-medium text-gray-700">English (USA)</span>
-                        </button>
-                        <button onClick={() => changeLanguage('jp')} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
-                            <span className="text-2xl">🇯🇵</span>
-                            <span className="text-sm font-medium text-gray-700">日本語 (Japanese)</span>
-                        </button>
-                        <button onClick={() => changeLanguage('nl')} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
-                            <span className="text-2xl">🇳🇱</span>
-                            <span className="text-sm font-medium text-gray-700">Nederlands (Dutch)</span>
-                        </button>
-                        <button onClick={() => changeLanguage('de')} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
-                            <span className="text-2xl">🇩🇪</span>
-                            <span className="text-sm font-medium text-gray-700">Deutsch (German)</span>
-                        </button>
-                    </div>
-                </div>
-                )}
+                {mounted && <LanguageSwitcher />}
                 
                 <button onClick={() => router.push('/investor-relations')} className="hidden md:flex items-center gap-2 bg-yareh-blue text-white px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-lg shadow-blue-900/20 font-semibold">
-                    <span>Investasi</span>
+                    <span>{t('nav.investment')}</span>
                     <i className="ph ph-arrow-right"></i>
                 </button>
                 <button className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
@@ -152,30 +89,30 @@ export default function HomePage() {
             <div className="space-y-8 animate-fade-in-up">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium">
                     <i className="ph-fill ph-plant text-yareh-green"></i>
-                    <span>Ketahanan Pangan Berkelanjutan</span>
+                    <span>{t('home.tagline')}</span>
                 </div>
                 
                 <h1 className="text-5xl lg:text-7xl font-serif font-bold text-white leading-[1.1] text-glow">
-                    Penyedia Jahe dari <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500">Negara Kepulauan Rempah</span>
+                    {t('home.heroTitle1')} <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500">{t('home.heroTitle2')}</span>
                 </h1>
                 
                 <p className="text-xl text-gray-200 max-w-xl font-light leading-relaxed">
-                    Membangun integritas dalam bisnis pangan dunia. Visi kami menjadi penyuplai jahe terbesar dengan teknologi pertanian regeneratif dan transparansi total.
+                    {t('home.heroDescription')}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     <button className="px-8 py-4 bg-gradient-to-r from-yareh-green to-emerald-500 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
                         <i className="ph ph-download-simple text-xl"></i>
-                        Unduh Ringkasan Eksekutif
+                        {t('home.downloadBrochure')}
                     </button>
                     <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-xl font-bold hover:bg-white/20 transition-all flex items-center justify-center gap-2">
-                        Hubungi Tim Sales
+                        {t('home.contactSales')}
                     </button>
                 </div>
 
                 <div className="pt-8 border-t border-white/10">
-                    <p className="text-white/60 text-sm italic mb-2">&quot;Nama baik lebih berharga dari pada kekayaan besar&quot;</p>
+                    <p className="text-white/60 text-sm italic mb-2">{t('home.bibleVerse')}</p>
                     <div className="flex items-center gap-2 text-yareh-green font-serif font-bold">
                         <i className="ph-fill ph-book-bookmark"></i>
                         <span>Amsal 22:1</span>
@@ -188,12 +125,12 @@ export default function HomePage() {
                 <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl text-white transform hover:scale-105 transition-all duration-300">
                     <i className="ph-fill ph-chart-line-up text-4xl text-yareh-green mb-4"></i>
                     <h3 className="text-3xl font-bold mb-1">40 Ton<span className="text-sm font-normal text-white/60">/Ha</span></h3>
-                    <p className="text-sm text-gray-300">Potensi Produksi Jahe Premium di lahan Hatusua.</p>
+                    <p className="text-sm text-gray-300">{t('home.statsProduction')}</p>
                 </div>
                 <div className="bg-gradient-to-br from-yareh-blue/80 to-yareh-blue/40 backdrop-blur-xl border border-white/20 p-6 rounded-2xl text-white mt-12 transform hover:scale-105 transition-all duration-300">
                     <i className="ph-fill ph-globe-hemisphere-east text-4xl text-blue-300 mb-4"></i>
                     <h3 className="text-3xl font-bold mb-1">5 Negara</h3>
-                    <p className="text-sm text-gray-200">Ekspansi pasar ekspor (USA, Jepang, Eropa).</p>
+                    <p className="text-sm text-gray-200">{t('home.statsExport')}</p>
                 </div>
                 <div className="col-span-2 bg-white/95 backdrop-blur-md p-6 rounded-2xl text-gray-900 flex items-center gap-6 transform hover:scale-105 transition-all duration-300 border-l-4 border-yareh-green">
                     <div className="p-3 bg-green-100 rounded-full text-yareh-green">
@@ -201,7 +138,7 @@ export default function HomePage() {
                     </div>
                     <div>
                         <h4 className="font-bold text-lg">Pertanian Regeneratif</h4>
-                        <p className="text-sm text-gray-600">Zero Deforestation & Pemberdayaan Petani Lokal Maluku.</p>
+                        <p className="text-sm text-gray-600">{t('home.statsRegenerative')}</p>
                     </div>
                     <div className="ml-auto">
                         <i className="ph-bold ph-arrow-right text-gray-400"></i>
@@ -271,30 +208,30 @@ export default function HomePage() {
                 
                 <div className="lg:col-span-7 space-y-8">
                     <div className="inline-block px-4 py-1 rounded-full bg-blue-50 text-yareh-blue text-xs font-bold tracking-widest uppercase">
-                        Tentang Kami
+                        {t('home.aboutHeading')}
                     </div>
                     <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 leading-tight">
-                        Mengembalikan Kejayaan <br />
-                        <span className="text-yareh-blue">Kepulauan Rempah</span>
+                        {t('home.aboutTitle1')} <br />
+                        <span className="text-yareh-blue">{t('home.aboutTitle2')}</span>
                     </h2>
                     <p className="text-gray-600 text-lg leading-relaxed">
-                        PT ESE (YAREHNASA) hadir bukan sekadar sebagai entitas bisnis, namun sebagai pembawa narasi sejarah. Melalui perkebunan seluas 10 Ha yang akan berekspansi hingga 100 Ha, kami memadukan kekayaan tanah vulkanis Maluku dengan inovasi teknologi modern.
+                        {t('home.aboutDescription')}
                     </p>
                     
                     <div className="grid sm:grid-cols-2 gap-8 pt-4">
                         <div className="pl-6 border-l-2 border-yareh-green">
-                            <h4 className="text-xl font-bold text-gray-900 mb-2">Visi Global</h4>
-                            <p className="text-gray-600 text-sm">Menjadi penyuplai jahe terbesar dunia yang dikenal karena kualitas dan integritas.</p>
+                            <h4 className="text-xl font-bold text-gray-900 mb-2">{t('home.visionTitle')}</h4>
+                            <p className="text-gray-600 text-sm">{t('home.visionDescription')}</p>
                         </div>
                         <div className="pl-6 border-l-2 border-yareh-blue">
-                            <h4 className="text-xl font-bold text-gray-900 mb-2">Integritas</h4>
-                            <p className="text-gray-600 text-sm">Berkomitmen pada transparansi, keberlanjutan, dan kesejahteraan petani.</p>
+                            <h4 className="text-xl font-bold text-gray-900 mb-2">{t('home.integrityTitle')}</h4>
+                            <p className="text-gray-600 text-sm">{t('home.integrityDescription')}</p>
                         </div>
                     </div>
 
                     <div className="pt-6">
                         <button onClick={() => router.push('/about-us')} className="group flex items-center gap-2 text-yareh-blue font-bold hover:gap-4 transition-all">
-                            <span>Baca Kisah Kami</span>
+                            <span>{t('home.readStory')}</span>
                             <i className="ph-bold ph-arrow-right"></i>
                         </button>
                     </div>
@@ -307,9 +244,9 @@ export default function HomePage() {
     <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
-                <h2 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-4">Inovasi dalam Setiap Rimpang</h2>
+                <h2 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-4">{t('home.innovationTitle')}</h2>
                 <p className="text-gray-600">
-                    Kombinasi antara kearifan lokal pertanian Maluku dengan teknologi presisi kelas dunia.
+                    {t('home.innovationDescription')}
                 </p>
             </div>
 
@@ -536,18 +473,18 @@ export default function HomePage() {
 
                 {/* Quick Links */}
                 <div>
-                    <h4 className="font-bold text-lg mb-6">Perusahaan</h4>
+                    <h4 className="font-bold text-lg mb-6">{t('footer.company')}</h4>
                     <ul className="space-y-4 text-gray-400">
-                        <li><a href="#" onClick={() => router.push('/about-us')} className="hover:text-white transition-colors">Tentang Kami</a></li>
-                        <li><a href="#" onClick={() => router.push('/sustainability')} className="hover:text-white transition-colors">Keberlanjutan</a></li>
-                        <li><a href="#" onClick={() => router.push('/investor-relations')} className="hover:text-white transition-colors">Investor Relations</a></li>
+                        <li><a href="#" onClick={() => router.push('/about-us')} className="hover:text-white transition-colors">{t('nav.about')}</a></li>
+                        <li><a href="#" onClick={() => router.push('/sustainability')} className="hover:text-white transition-colors">{t('nav.sustainability')}</a></li>
+                        <li><a href="#" onClick={() => router.push('/investor-relations')} className="hover:text-white transition-colors">{t('nav.investor')}</a></li>
                         <li><a href="#" className="hover:text-white transition-colors">Karir</a></li>
                     </ul>
                 </div>
 
                 {/* Products */}
                 <div>
-                    <h4 className="font-bold text-lg mb-6">Produk & Pasar</h4>
+                    <h4 className="font-bold text-lg mb-6">{t('footer.products')}</h4>
                     <ul className="space-y-4 text-gray-400">
                         <li><a href="#" onClick={() => router.push('/market-and-products')} className="hover:text-white transition-colors">Jahe Premium</a></li>
                         <li><a href="#" className="hover:text-white transition-colors">Pasar Global</a></li>
@@ -558,7 +495,7 @@ export default function HomePage() {
 
                 {/* Contact */}
                 <div>
-                    <h4 className="font-bold text-lg mb-6">Hubungi Kami</h4>
+                    <h4 className="font-bold text-lg mb-6">{t('footer.contact')}</h4>
                     <ul className="space-y-4 text-gray-400">
                         <li className="flex items-start gap-3">
                             <i className="ph-fill ph-map-pin text-yareh-green mt-1"></i>
@@ -577,7 +514,7 @@ export default function HomePage() {
             </div>
 
             <div className="border-t border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-                <p>&copy; 2024 PT ESE YAREHNASA. All rights reserved.</p>
+                <p>{t('footer.rights')}</p>
                 <div className="flex gap-6">
                     <a href="#" className="hover:text-white">Privacy Policy</a>
                     <a href="#" className="hover:text-white">Terms of Service</a>
