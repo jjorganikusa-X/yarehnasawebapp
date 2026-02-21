@@ -264,7 +264,7 @@ export default function MarketAndProductsPage() {
                         <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 text-center">
                             <i className="ph-fill ph-drop text-2xl text-blue-500 mb-2"></i>
                             <p className="text-xs text-gray-500 uppercase">Moisture</p>
-                            <p className="font-bold text-gray-900">< 12%</p>
+                            <p className="font-bold text-gray-900">&lt; 12%</p>
                         </div>
                         <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 text-center">
                             <i className="ph-fill ph-ruler text-2xl text-purple-500 mb-2"></i>
